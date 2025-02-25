@@ -6,7 +6,7 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "uni-app"
+        "navigationBarTitleText": "lovemeal"
       }
     },
     {
@@ -24,28 +24,55 @@
     {
       "path": "pages/menu/index",
       "style": {
-        "navigationBarTitleText": "菜品列表"
+        "navigationBarTitleText": "菜品"
       }
-    }
-    ,
+    },
     {
       "path": "pages/order/index",
       "style": {
-        "navigationBarTitleText": "订单列表"
+        "navigationBarTitleText": "订单"
       }
-    }
-    ,
+    },
     {
       "path": "pages/profile/index",
       "style": {
         "navigationBarTitleText": "我的"
       }
     }
+  
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "uni-app",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "/static/tabbarIcon/home.svg",
+        "selectedIconPath": "/static/tabbarIcon/home-fill.svg"
+      },
+      {
+        "pagePath": "pages/menu/index",
+        "text": "菜品",
+        "iconPath": "/static/tabbarIcon/cart-empty.svg",
+        "selectedIconPath": "/static/tabbarIcon/cart-empty-fill.svg"
+      },
+      {
+        "pagePath": "pages/order/index",
+        "text": "订单",
+       "iconPath": "/static/tabbarIcon/order.svg",
+        "selectedIconPath": "/static/tabbarIcon/order-inspection.svg"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的",
+        "iconPath": "/static/tabbarIcon/customer.svg",
+        "selectedIconPath": "/static/tabbarIcon/customer-fill.svg"
+      }
+    ]
   }
 }

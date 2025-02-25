@@ -8,11 +8,11 @@
     <!-- Album 相册 -->
     <view class="u-page">
       <view class="u-demo-block">
-        <text class="u-demo-block__title">多图模式</text>
+        <text class="u-demo-block__title">朋友圈模式展示</text>
         <view class="u-demo-block__content">
           <view class="album">
             <view class="album__avatar">
-              <image src="http://110.41.54.76:13262//uploads/img/2025/0218/20250218143533-1431.jpg" mode="" style="width: 32px; height: 32px"></image>
+              <image src="/static/images/n1.jpg" mode="" style="width: 32px; height: 32px"></image>
             </view>
             <view class="album__content">
               <u--text text="uView UI" type="primary" bold size="17"></u--text>
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-  import Tabbar from 'components/common/tabbar.vue'
+  import Tabbar from '@/components/common/tabbar.vue'
   export default {
     components: {
       Tabbar,
@@ -44,34 +44,24 @@
       return {
         albumWidth: 0,
         urls2: [
-          'http://110.41.54.76:13262/uploads/img/2025/0218/20250218144104-1617.jpg',
-          'http://110.41.54.76:13262/uploads/img/2025/0218/20250218144350-5949.jpg',
-          'http://110.41.54.76:13262/uploads/img/2025/0218/20250218144553-3743.jpg',
-          'http://110.41.54.76:13262/uploads/img/2025/0218/20250218145051-8298.jpg',
-          'http://110.41.54.76:13262/uploads/img/2025/0218/20250218150131-3582.jpg',
-          'http://110.41.54.76:13262//uploads/img/2025/0218/20250218152202-5890.jpg',
-          // 'https://xxx.com/album/7.jpg',
-          // 'https://xxx.com/album/8.jpg',
-          // 'https://xxx.com/album/9.jpg',
-          // 'https://xxx.com/album/10.jpg',
+          '/static/images/n11.png',
+          '/static/images/n12.jpg',
+          '/static/images/n12.png',
+          '/static/images/n13.jpg',
+          '/static/images/n13.png',
+          '/static/images/n14.jpg',
         ],
         text1: '今日上线芋头蒸米饭,仅需￥1/碗', //滚动通知
         list: [
           //横向滚动列表
           {
-            thumb: 'http://110.41.54.76:13262/uploads/test/2025/0218/20250218152313-7316.png',
+            thumb: '/static/images/n15.jpg',
           },
           {
-            thumb: 'http://110.41.54.76:13262/uploads/test/2025/0218/40229.jpg',
+            thumb: '/static/images/n16.jpg',
           },
           {
-            thumb: 'http://localhost:8080/static/logo.png',
-          },
-          {
-            thumb: 'http://localhost:8080/static/logo.png',
-          },
-          {
-            thumb: 'http://localhost:8080/static/logo.png',
+            thumb: '/static/images/n17.jpg',
           },
         ],
       }
@@ -85,11 +75,11 @@
           icon: 'error',
           duration: 1500,
           success: () => {
-            setTimeout(() => {
-              uni.navigateTo({
-                url: '/pages/user/login',
-              })
-            }, 1500)
+            // setTimeout(() => {
+            //   uni.navigateTo({
+            //     url: '/pages/user/login',
+            //   })
+            // }, 1500)
           },
         })
         return false

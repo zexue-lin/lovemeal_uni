@@ -151,7 +151,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../static/style/mixin';
+  @import '@/static/style/mixin';
 
   .loginForm {
     background-color: #fff;
