@@ -1,6 +1,6 @@
 # lovemeal
 
-## Project setup
+## 安装依赖
 
 ```
 yarn install
@@ -18,6 +18,15 @@ yarn serve
 yarn build
 ```
 
+### 运行到微信小程序(本地调试)
+```
+yarn dev:mp-weixin
+```
+
+### 打包微信小程序（用于发布）
+```
+yarn build:mp-weixin
+```
 ### Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).

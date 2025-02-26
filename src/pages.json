@@ -26,6 +26,11 @@
       "style": {
         "navigationBarTitleText": "菜品"
       }
+    }, {
+      "path": "pages/menu/foodDetail",
+      "style": {
+        "navigationBarTitleText": "菜品详情"
+      }
     },
     {
       "path": "pages/order/index",
@@ -52,26 +57,26 @@
       {
         "pagePath": "pages/index/index",
         "text": "首页",
-        "iconPath": "/static/tabbarIcon/home.svg",
-        "selectedIconPath": "/static/tabbarIcon/home-fill.svg"
+        "iconPath": "/static/tabbarIcon/home.png",
+        "selectedIconPath": "/static/tabbarIcon/home-fill.png"
       },
       {
         "pagePath": "pages/menu/index",
         "text": "菜品",
-        "iconPath": "/static/tabbarIcon/cart-empty.svg",
-        "selectedIconPath": "/static/tabbarIcon/cart-empty-fill.svg"
+        "iconPath": "/static/tabbarIcon/cart-empty.png",
+        "selectedIconPath": "/static/tabbarIcon/cart-empty-fill.png"
       },
       {
         "pagePath": "pages/order/index",
         "text": "订单",
-       "iconPath": "/static/tabbarIcon/order.svg",
-        "selectedIconPath": "/static/tabbarIcon/order-inspection.svg"
+       "iconPath": "/static/tabbarIcon/order.png",
+        "selectedIconPath": "/static/tabbarIcon/order-inspection.png"
       },
       {
         "pagePath": "pages/profile/index",
         "text": "我的",
-        "iconPath": "/static/tabbarIcon/customer.svg",
-        "selectedIconPath": "/static/tabbarIcon/customer-fill.svg"
+        "iconPath": "/static/tabbarIcon/customer.png",
+        "selectedIconPath": "/static/tabbarIcon/customer-fill.png"
       }
     ]
   }

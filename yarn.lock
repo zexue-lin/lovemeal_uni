@@ -4735,6 +4735,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-runtime@npm:^6.0.0":
+  version: 6.26.0
+  resolution: "babel-runtime@npm:6.26.0"
+  dependencies:
+    core-js: "npm:^2.4.0"
+    regenerator-runtime: "npm:^0.11.0"
+  checksum: 10c0/caa752004936b1463765ed3199c52f6a55d0613b9bed108743d6f13ca532b821d4ea9decc4be1b583193164462b1e3e7eefdfa36b15c72e7daac58dd72c1772f
+  languageName: node
+  linkType: hard
+
 "backo2@npm:1.0.2":
   version: 1.0.2
   resolution: "backo2@npm:1.0.2"
@@ -4805,6 +4815,15 @@ __metadata:
   dependencies:
     tweetnacl: "npm:^0.14.3"
   checksum: 10c0/ddfe85230b32df25aeebfdccfbc61d3bc493ace49c884c9c68575de1f5dcf733a5d7de9def3b0f318b786616b8d85bad50a28b1da1750c43e0012c93badcc148
+  languageName: node
+  linkType: hard
+
+"better-scroll@npm:1.15.2":
+  version: 1.15.2
+  resolution: "better-scroll@npm:1.15.2"
+  dependencies:
+    babel-runtime: "npm:^6.0.0"
+  checksum: 10c0/e075a84ad2040c2339cff7cf0781ea877ad31269c44ed28c0b6f9066e061e704fe80f36b735461de1ab1e7256660cb2aaec99dbf45a50c8de7c45cb37a954eee
   languageName: node
   linkType: hard
 
@@ -5926,6 +5945,13 @@ __metadata:
   dependencies:
     browserslist: "npm:^4.24.3"
   checksum: 10c0/44f6e88726fe266a5be9581a79766800478a8d5c492885f2d4c2a4e2babd9b06bc1689d5340d3a61ae7332f990aff2e83b6203ff8773137a627cfedfbeefabeb
+  languageName: node
+  linkType: hard
+
+"core-js@npm:^2.4.0":
+  version: 2.6.12
+  resolution: "core-js@npm:2.6.12"
+  checksum: 10c0/00128efe427789120a06b819adc94cc72b96955acb331cb71d09287baf9bd37bebd191d91f1ee4939c893a050307ead4faea08876f09115112612b6a05684b63
   languageName: node
   linkType: hard
 
@@ -10355,6 +10381,7 @@ __metadata:
     "@vue/runtime-dom": "npm:^3.5.13"
     "@vue/shared": "npm:^3.0.0"
     babel-plugin-import: "npm:^1.11.0"
+    better-scroll: "npm:1.15.2"
     core-js: "npm:^3.8.3"
     cross-env: "npm:^7.0.2"
     flyio: "npm:^0.6.2"
@@ -12980,6 +13007,13 @@ __metadata:
   version: 1.4.2
   resolution: "regenerate@npm:1.4.2"
   checksum: 10c0/f73c9eba5d398c818edc71d1c6979eaa05af7a808682749dd079f8df2a6d91a9b913db216c2c9b03e0a8ba2bba8701244a93f45211afbff691c32c7b275db1b8
+  languageName: node
+  linkType: hard
+
+"regenerator-runtime@npm:^0.11.0":
+  version: 0.11.1
+  resolution: "regenerator-runtime@npm:0.11.1"
+  checksum: 10c0/69cfa839efcf2d627fe358bf302ab8b24e5f182cb69f13e66f0612d3640d7838aad1e55662135e3ef2c1cc4322315b757626094fab13a48f9a64ab4bdeb8795b
   languageName: node
   linkType: hard
 

@@ -1,182 +1,133 @@
 <template>
   <div>
-    <section style="padding: 0.5rem">
-      <u-swiper :list="header_list" keyName="image" showTitle :autoplay="true" circular height="150px"></u-swiper>
-    </section>
-    <!-- 中间选择 -->
-    <section class="change_show_type" ref="chooseType">
-      <div>
-        <span :class="{ activity_show: changeShowType == 'food' }" @click="changeShowType = 'food'">商品</span>
-      </div>
-      <div>
-        <span :class="{ activity_show: changeShowType == 'rating' }" @click="changeShowType = 'rating'">评价</span>
-      </div>
-    </section>
-    <!-- 选择商品 -->
-    <transition name="fade-choose">
-      <section v-show="changeShowType == 'food'" class="food_container">
-        <section class="menu_container">
-          <section class="menu_left" id="wrapper_menu" ref="wrapperMenu">
-            <ul>
-              <li v-for="(item, index) in menuList" :key="index" class="menu_left_li" @click="chooseMenu(index)">
-                <!-- <img :src="getImgPath(item.icon_url)" v-if="item.icon_url" /> -->
-                <span>{{ item.name }}</span>
-                <!-- <span class="category_num" v-if="categoryNum[index] && item.type == 1">{{ categoryNum[index] }}</span> -->
-              </li>
-            </ul>
-          </section>
-          <section class="menu_right" ref="menuFoodList">
-            <ul>
-              <li v-for="(item, index) in menuList" :key="index">
-                <header class="menu_detail_header">
-                  <section class="menu_detail_header_left">
-                    <strong class="menu_item_title">{{ item.name }}</strong>
-                    <span class="menu_item_description">{{ item.description }}</span>
-                  </section>
-                  <span class="menu_detail_header_right" @click="showTitleDetail(index)"></span>
-                </header>
-                <section v-for="(foods, foodindex) in item.foods" :key="foodindex" class="menu_detail_list">
-                  <router-link
-                    :to="{
-                      path: 'shop/foodDetail',
-                      query: {
-                        image_path: foods.image_path,
-                        description: foods.description,
-                        month_sales: foods.month_sales,
-                        name: foods.name,
-                        rating: foods.rating,
-                        rating_count: foods.rating_count,
-                        satisfy_rate: foods.satisfy_rate,
-                        foods,
-                      },
-                    }"
-                    tag="div"
-                    class="menu_detail_link"
-                  >
-                    <section class="menu_food_img">
-                      <img src="/static/images/n1.jpg" />
-                    </section>
-                    <section class="menu_food_description">
-                      <h3 class="food_description_head">
-                        <strong class="description_foodname">{{ foods.name }}</strong>
-                        <ul v-if="foods.attributes" class="attributes_ul">
-                          <li
-                            v-if="attribute"
-                            v-for="(attribute, foodindex) in foods.attributes"
-                            :key="foodindex"
-                            :style="{ color: '#' + attribute.icon_color, borderColor: '#' + attribute.icon_color }"
-                            :class="{ attribute_new: attribute.icon_name == '新' }"
-                          >
-                            <p :style="{ color: attribute.icon_name == '新' ? '#fff' : '#' + attribute.icon_color }">
-                              {{ attribute.icon_name == '新' ? '新品' : attribute.icon_name }}
-                            </p>
-                          </li>
-                        </ul>
-                      </h3>
-                      <p class="food_description_content">{{ foods.description }}</p>
-                      <p class="food_description_sale_rating">
-                        <span>月售{{ foods.month_sales }}份</span>
-                        <span>好评率{{ foods.satisfy_rate }}%</span>
-                      </p>
-                      <p v-if="foods.activity" class="food_activity">
-                        <span :style="{ color: '#' + foods.activity.image_text_color, borderColor: '#' + foods.activity.icon_color }">{{
-                          foods.activity.image_text
-                        }}</span>
-                      </p>
-                    </section>
-                  </router-link>
-                  <footer class="menu_detail_footer">
-                    <section class="food_price">
-                      <span>¥</span>
-                      <span>{{ foods.specfoods[0].price }}</span>
-                      <span>2起</span>
-                    </section>
-                    <buy-cart
-                      :shopId="shopId"
-                      :foods="foods"
-                      @moveInCart="listenInCart"
-                      @showChooseList="showChooseList"
-                      @showReduceTip="showReduceTip"
-                      @showMoveDot="showMoveDotFun"
-                    ></buy-cart>
-                  </footer>
-                </section>
-              </li>
-            </ul>
-          </section>
-        </section>
-        <section class="buy_cart_container">
-          <section @click="toggleCartList" class="cart_icon_num">
-            <div class="cart_icon_container" :class="{ cart_icon_activity: totalPrice > 0, move_in_cart: receiveInCart }" ref="cartContainer">
-              <span v-if="totalNum" class="cart_list_length">
-                {{ totalNum }}
-              </span>
-              <svg class="cart_icon">
-                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cart-icon"></use>
-              </svg>
-            </div>
-            <div class="cart_num">
-              <div>¥ {{ totalPrice }}</div>
-              <div>配送费¥{{ deliveryFee }}</div>
-            </div>
-          </section>
-          <section class="gotopay" :class="{ gotopay_acitvity: minimumOrderAmount <= 0 }">
-            <span class="gotopay_button_style" v-if="minimumOrderAmount > 0">还差¥{{ minimumOrderAmount }}起送</span>
-            <router-link :to="{ path: '/confirmOrder', query: { geohash, shopId } }" class="gotopay_button_style" v-else>去结算</router-link>
-          </section>
-        </section>
-        <!-- <transition name="toggle-cart">
-          <section class="cart_food_list" v-show="showCartList && cartFoodList">
-            <header>
-              <h4>购物车</h4>
-              <div @click="clearCart">
-                <svg>
-                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cart-remove"></use>
-                </svg>
-                <span class="clear_cart">清空</span>
-              </div>
-            </header>
-            <section class="cart_food_details" id="cartFood">
+    <section v-if="!showLoading" class="shop_container">
+      <section style="padding: 0.5rem">
+        <u-swiper :list="header_list" keyName="image" showTitle :autoplay="true" circular height="150px"></u-swiper>
+      </section>
+      <!-- 中间选择 -->
+      <section class="change_show_type" ref="chooseType">
+        <div>
+          <span :class="{ activity_show: changeShowType == 'food' }" @click="changeShowType = 'food'">商品</span>
+        </div>
+        <div>
+          <span :class="{ activity_show: changeShowType == 'rating' }" @click="changeShowType = 'rating'">评价</span>
+        </div>
+      </section>
+      <!-- 选择商品 -->
+      <transition name="fade-choose">
+        <section v-show="changeShowType == 'food'" class="food_container">
+          <section class="menu_container">
+            <section class="menu_left" id="wrapper_menu" ref="wrapperMenu">
               <ul>
-                <li v-for="(item, index) in cartFoodList" :key="index" class="cart_food_li">
-                  <div class="cart_list_num">
-                    <p class="ellipsis">{{ item.name }}</p>
-                    <p class="ellipsis">{{ item.specs }}</p>
-                  </div>
-                  <div class="cart_list_price">
-                    <span>¥</span>
-                    <span>{{ item.price }}</span>
-                  </div>
-                  <section class="cart_list_control">
-                    <span @click="removeOutCart(item.category_id, item.item_id, item.food_id, item.name, item.price, item.specs)">
-                      <svg>
-                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cart-minus"></use>
-                      </svg>
-                    </span>
-                    <span class="cart_num">{{ item.num }}</span>
-                    <svg class="cart_add" @click="addToCart(item.category_id, item.item_id, item.food_id, item.name, item.price, item.specs)">
-                      <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cart-add"></use>
-                    </svg>
+                <!-- 当前菜单项的索引 index 和 menuIndex 相等，那么为该菜单项添加 activity_menu 类 -->
+                <li
+                  v-for="(item, index) in menuList"
+                  :key="index"
+                  class="menu_left_li"
+                  :class="{ activity_menu: index === menuIndex }"
+                  @click="chooseMenu(index)"
+                >
+                  <span>{{ item.name }}</span>
+                </li>
+              </ul>
+            </section>
+            <section class="menu_right" ref="menuFoodList">
+              <ul>
+                <li v-for="(item, index) in menuList" :key="index">
+                  <header class="menu_detail_header">
+                    <section class="menu_detail_header_left">
+                      <strong class="menu_item_title">{{ item.name }}</strong>
+                      <span class="menu_item_description">{{ item.description }}</span>
+                    </section>
+                    <span class="menu_detail_header_right" @click="showTitleDetail(index)"></span>
+                    <p class="description_tip" v-if="index == TitleDetailIndex">
+                      <span>{{ item.name }}</span>
+                      {{ item.description }}
+                    </p>
+                  </header>
+                  <section v-for="(foods, foodindex) in item.foods" :key="foodindex" class="menu_detail_list">
+                    <router-link
+                      :to="{
+                        path: './foodDetail',
+                        query: {
+                          image_path: foods.image_path,
+                          description: foods.description,
+                          month_sales: foods.month_sales,
+                          name: foods.name,
+                          rating: foods.rating,
+                          rating_count: foods.rating_count,
+                          satisfy_rate: foods.satisfy_rate,
+                          foods,
+                        },
+                      }"
+                      tag="div"
+                      class="menu_detail_link"
+                    >
+                      <section class="menu_food_img">
+                        <img src="/static/images/n14.jpg" />
+                      </section>
+                      <section class="menu_food_description">
+                        <h3 class="food_description_head">
+                          <strong class="description_foodname">{{ foods.name }}</strong>
+                          <ul v-if="foods.attributes" class="attributes_ul">
+                            <li
+                              v-if="attribute"
+                              v-for="(attribute, foodindex) in foods.attributes"
+                              :key="foodindex"
+                              :style="{ color: '#' + attribute.icon_color, borderColor: '#' + attribute.icon_color }"
+                              :class="{ attribute_new: attribute.icon_name == '新' }"
+                            >
+                              <p :style="{ color: attribute.icon_name == '新' ? '#fff' : '#' + attribute.icon_color }">
+                                {{ attribute.icon_name == '新' ? '新品' : attribute.icon_name }}
+                              </p>
+                            </li>
+                          </ul>
+                        </h3>
+                        <p class="food_description_content">{{ foods.description }}</p>
+                        <p class="food_description_sale_rating">
+                          <span>月售{{ foods.month_sales }}份</span>
+                          <span>好评率{{ foods.satisfy_rate }}%</span>
+                        </p>
+                        <p v-if="foods.activity" class="food_activity">
+                          <span :style="{ color: '#' + foods.activity.image_text_color, borderColor: '#' + foods.activity.icon_color }">{{
+                            foods.activity.image_text
+                          }}</span>
+                        </p>
+                      </section>
+                    </router-link>
+                    <footer class="menu_detail_footer">
+                      <section class="food_price">
+                        <span>¥</span>
+                        <span>{{ foods.specfoods[0].price }}</span>
+                        <span>20起送</span>
+                      </section>
+                    </footer>
                   </section>
                 </li>
               </ul>
             </section>
           </section>
-        </transition>
-        <transition name="fade">
-          <div class="screen_cover" v-show="showCartList && cartFoodList" @click="toggleCartList"></div>
-        </transition> -->
-      </section>
-    </transition>
+        </section>
+      </transition>
+    </section>
+    <loading v-show="showLoading || loadRatings"></loading>
+    <section class="animation_opactiy shop_back_svg_container" v-if="showLoading">
+      <img src="../../static/images/shop_back_svg.svg" />
+    </section>
     <Tabbar />
   </div>
 </template>
 <script>
-  import Tabbar from 'components/common/tabbar.vue'
+  import Tabbar from 'components/common/tabbar'
+  import loading from 'components/common/loading'
+  import { loadMore } from 'components/common/mixin'
+  import BScroll from 'better-scroll'
   export default {
     components: {
       Tabbar,
+      loading,
     },
+    mixins: [loadMore],
     data() {
       return {
         // 头部swiper
@@ -194,7 +145,14 @@
             title: '展示3',
           },
         ],
+        showLoading: true, //显示加载动画
+        loadRatings: false, //加载更多评论是显示加载组件
         changeShowType: 'food', //切换显示商品或者评价
+        menuIndex: 0, //已选菜单索引值，默认为0
+        menuIndexChange: true, //解决选中index时，scroll监听事件重复判断设置index的bug
+        shopListTop: [], //商品列表的高度集合
+        foodScroll: null, //食品列表scroll
+        TitleDetailIndex: null, //点击展示列表头部详情
         // 菜单列表
         menuList: [
           {
@@ -204,7 +162,67 @@
             foods: [
               {
                 name: '红烧肉',
-                image_path: 'hongshaorou.jpg',
+                image_path: 'images/n1.jpg',
+                description: '经典红烧肉，肥而不腻',
+                month_sales: 100,
+                rating: 4.5,
+                rating_count: 50,
+                satisfy_rate: 95,
+                specfoods: [
+                  {
+                    price: 38,
+                  },
+                ],
+                attributes: [
+                  // ✅ 添加 attributes 数据
+                  { icon_name: '新', icon_color: 'FF0000' }, // 新品标签，红色
+                  { icon_name: '特价', icon_color: '00FF00' }, // 绿色特价标签
+                ],
+              },
+              {
+                name: '宫保鸡丁',
+                image_path: 'images/n11.png',
+                description: '酸甜可口，鸡肉鲜嫩',
+                month_sales: 80,
+                rating: 4.2,
+                rating_count: 40,
+                satisfy_rate: 90,
+                specfoods: [
+                  {
+                    price: 28,
+                  },
+                ],
+                attributes: [], // ✅ 即使没有属性，也提供空数组，避免错误
+              },
+            ],
+          },
+          {
+            name: '新品榜',
+            icon_url: 'drink.png',
+            type: 1,
+            foods: [
+              {
+                name: '可乐',
+                image_path: 'images/n1.jpg',
+                description: '冰镇可乐，畅爽一夏',
+                month_sales: 200,
+                rating: 4.8,
+                rating_count: 100,
+                satisfy_rate: 98,
+                specfoods: [
+                  {
+                    price: 5,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: '热销榜1',
+            foods: [
+              {
+                name: '红烧肉',
+                image_path: 'images/n1.jpg',
                 description: '经典红烧肉，肥而不腻',
                 month_sales: 100,
                 rating: 4.5,
@@ -218,7 +236,7 @@
               },
               {
                 name: '宫保鸡丁',
-                image_path: 'gongbaojiding.jpg',
+                image_path: 'images/n11.jpg',
                 description: '酸甜可口，鸡肉鲜嫩',
                 month_sales: 80,
                 rating: 4.2,
@@ -233,25 +251,154 @@
             ],
           },
           {
-            name: '新品榜',
-            icon_url: 'drink.png',
-            type: 1,
+            name: '热销榜22',
             foods: [
               {
-                name: '可乐',
-                image_path: 'cola.jpg',
-                description: '冰镇可乐，畅爽一夏',
-                month_sales: 200,
-                rating: 4.8,
-                rating_count: 100,
-                satisfy_rate: 98,
+                name: '红烧肉',
+                image_path: 'images/n12.jpg',
+                description: '经典红烧肉，肥而不腻',
+                month_sales: 100,
+                rating: 4.5,
+                rating_count: 50,
+                satisfy_rate: 95,
                 specfoods: [
                   {
-                    price: 5,
+                    price: 38,
+                  },
+                ],
+                attributes: [
+                  { icon_name: '新', icon_color: '0000FF' }, // 蓝色新品标签
+                ],
+              },
+              {
+                name: '宫保鸡丁',
+                image_path: 'images/n13.jpg',
+                description: '酸甜可口，鸡肉鲜嫩',
+                month_sales: 80,
+                rating: 4.2,
+                rating_count: 40,
+                satisfy_rate: 90,
+                specfoods: [
+                  {
+                    price: 28,
                   },
                 ],
               },
             ],
+          },
+          {
+            name: '热销榜333',
+            foods: [
+              {
+                name: '红烧肉',
+                image_path: 'images/n14.jpg',
+                description: '经典红烧肉，肥而不腻',
+                month_sales: 100,
+                rating: 4.5,
+                rating_count: 50,
+                satisfy_rate: 95,
+                specfoods: [
+                  {
+                    price: 38,
+                  },
+                ],
+              },
+              {
+                name: '宫保鸡丁',
+                image_path: 'images/n6.jpg',
+                description: '酸甜可口，鸡肉鲜嫩',
+                month_sales: 80,
+                rating: 4.2,
+                rating_count: 40,
+                satisfy_rate: 90,
+                specfoods: [
+                  {
+                    price: 28,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: '热销榜333',
+          },
+          {
+            name: '热销榜333',
+            foods: [
+              {
+                name: '红烧肉',
+                image_path: 'images/n14.jpg',
+                description: '经典红烧肉，肥而不腻',
+                month_sales: 100,
+                rating: 4.5,
+                rating_count: 50,
+                satisfy_rate: 95,
+                specfoods: [
+                  {
+                    price: 38,
+                  },
+                ],
+              },
+              {
+                name: '宫保鸡丁',
+                image_path: 'images/n1.jpg',
+                description: '酸甜可口，鸡肉鲜嫩',
+                month_sales: 80,
+                rating: 4.2,
+                rating_count: 40,
+                satisfy_rate: 90,
+                specfoods: [
+                  {
+                    price: 28,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: '热销榜333',
+            foods: [
+              {
+                name: '红烧肉',
+                image_path: 'images/n1.jpg',
+                description: '经典红烧肉，肥而不腻',
+                month_sales: 100,
+                rating: 4.5,
+                rating_count: 50,
+                satisfy_rate: 95,
+                specfoods: [
+                  {
+                    price: 38,
+                  },
+                ],
+              },
+              {
+                name: '宫保鸡丁',
+                image_path: 'images/n1.jpg',
+                description: '酸甜可口，鸡肉鲜嫩',
+                month_sales: 80,
+                rating: 4.2,
+                rating_count: 40,
+                satisfy_rate: 90,
+                specfoods: [
+                  {
+                    price: 28,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: '热销榜333',
+          },
+          {
+            name: '热销榜333',
+          },
+          {
+            name: '热销榜333',
+          },
+          {
+            name: '热销榜333',
           },
         ],
         // 购物车数据
@@ -310,8 +457,108 @@
     },
     created() {},
     computed: {},
-    methods: {},
+    mounted() {
+      this.initData()
+      this.windowHeight = window.innerHeight
+    },
+    methods: {
+      async initData() {
+        try {
+          this.hideLoading() // 数据加载完成后再隐藏加载动画
+        } catch (error) {
+          console.error('Error loading menu data:', error)
+          this.hideLoading() // 即使发生错误，也隐藏加载动画
+        }
+      },
+      //获取食品列表的高度，存入shopListTop
+      getFoodListHeight() {
+        const listContainer = this.$refs.menuFoodList
+        if (listContainer) {
+          const listArr = Array.from(listContainer.children[0].children)
+          listArr.forEach((item, index) => {
+            this.shopListTop[index] = item.offsetTop
+          })
+          this.listenScroll(listContainer)
+        }
+      },
+      //当滑动食品列表时，监听其scrollTop值来设置对应的食品列表标题的样式
+      listenScroll(element) {
+        this.foodScroll = new BScroll(element, {
+          probeType: 3,
+          deceleration: 0.001,
+          bounce: false,
+          swipeTime: 2000,
+          click: true,
+        })
+
+        const wrapperMenu = new BScroll('#wrapper_menu', {
+          click: true,
+        })
+
+        const wrapMenuHeight = this.$refs.wrapperMenu.clientHeight
+        this.foodScroll.on('scroll', pos => {
+          if (!this.$refs.wrapperMenu) {
+            return
+          }
+          this.shopListTop.forEach((item, index) => {
+            if (this.menuIndexChange && Math.abs(Math.round(pos.y)) >= item) {
+              this.menuIndex = index
+              const menuList = this.$refs.wrapperMenu.querySelectorAll('.activity_menu')
+              const el = menuList[0]
+              wrapperMenu.scrollToElement(el, 800, 0, -(wrapMenuHeight / 2 - 50))
+            }
+          })
+        })
+      },
+
+      //加载更多评论
+      async loaderMoreRating() {
+        if (this.preventRepeatRequest) {
+          return
+        }
+        this.loadRatings = true
+        this.preventRepeatRequest = true
+        this.ratingOffset += 10
+        let ratingDate = await getRatingList(this.shopId, this.ratingOffset, this.ratingTagName)
+        this.ratingList = [...this.ratingList, ...ratingDate]
+        this.loadRatings = false
+        if (ratingDate.length >= 10) {
+          this.preventRepeatRequest = false
+        }
+      },
+      //点击左侧食品列表标题，相应列表移动到最顶层
+      chooseMenu(index) {
+        this.menuIndex = index
+        //menuIndexChange解决运动时listenScroll依然监听的bug
+        this.menuIndexChange = false
+        this.foodScroll.scrollTo(0, -this.shopListTop[index], 400)
+        this.foodScroll.on('scrollEnd', () => {
+          this.menuIndexChange = true
+        })
+      },
+
+      // 菜品分类右侧三个点
+      showTitleDetail(index) {
+        if (this.TitleDetailIndex == index) {
+          this.TitleDetailIndex = null
+        } else {
+          this.TitleDetailIndex = index
+        }
+      },
+      //隐藏动画
+      hideLoading() {
+        this.showLoading = false
+      },
+    },
     watch: {
+      //showLoading变化时说明组件已经获取初始化数据，在下一帧nextTick进行后续操作
+      showLoading: function (value) {
+        if (!value) {
+          this.$nextTick(() => {
+            this.getFoodListHeight()
+          })
+        }
+      },
       //商品、评论切换状态
       changeShowType: function (value) {
         if (value === 'rating') {
@@ -337,68 +584,5 @@
 </script>
 <style lang="scss" scoped>
   @import '@/static/style/mixin';
-  .menu_detail {
-    display: flex;
-    padding: 0.625rem;
-  }
-  .change_show_type {
-    display: flex;
-    background-color: #fff;
-    padding: 0.3rem 0 0.6rem;
-    border-bottom: 1px solid #ebebeb;
-    div {
-      flex: 1;
-      text-align: center;
-      span {
-        @include sc(0.65rem, #666);
-        padding: 0.2rem 0.1rem;
-        border-bottom: 0.12rem solid #fff;
-      }
-      .activity_show {
-        color: #3190e8;
-        border-color: #3190e8;
-      }
-    }
-  }
-  .menu_container {
-    display: flex;
-    flex: 1;
-    overflow-y: hidden;
-    position: relative;
-    .menu_left {
-      width: 3.8rem;
-      .menu_left_li {
-        padding: 0.7rem 0.3rem;
-        border-bottom: 0.025rem solid #ededed;
-        box-sizing: border-box;
-        border-left: 0.15rem solid #f8f8f8;
-        position: relative;
-        list-style-type: none;
-        span {
-          @include sc(0.6rem, #666);
-        }
-        .category_num {
-          position: absolute;
-          top: 0.1rem;
-          right: 0.1rem;
-          background-color: #ff461d;
-          line-height: 0.6rem;
-          text-align: center;
-          border-radius: 50%;
-          border: 0.025rem solid #ff461d;
-          min-width: 0.6rem;
-          height: 0.6rem;
-          @include sc(0.5rem, #fff);
-          font-family: Helvetica Neue, Tahoma, Arial;
-        }
-      }
-      .activity_menu {
-        border-left: 0.15rem solid #3190e8;
-        background-color: #fff;
-        span:nth-of-type(1) {
-          font-weight: bold;
-        }
-      }
-    }
-  }
+  @import '@/static/style/menu';
 </style>
