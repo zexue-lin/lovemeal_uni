@@ -75,11 +75,11 @@
           icon: 'error',
           duration: 1500,
           success: () => {
-            // setTimeout(() => {
-            //   uni.navigateTo({
-            //     url: '/pages/user/login',
-            //   })
-            // }, 1500)
+            setTimeout(() => {
+              uni.navigateTo({
+                url: '/pages/user/login',
+              })
+            }, 1500)
           },
         })
         return false

@@ -7,11 +7,11 @@ module.exports = (vm) => {
 
       config.timeout = 60000
       //#ifdef H5
-      config.baseURL = '/lovemeal';
+      config.baseURL = '/u/v1';
       //#endif
 
       //#ifdef MP-WEIXIN || APP-PLUS
-      config.baseURL = 'http://www.tttp8.com/lovemeal';
+      config.baseURL = 'http://127.0.0.1:8028/u/v1/';
       //#endif
 
       //请求头  
